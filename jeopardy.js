@@ -20,13 +20,16 @@
 
 let categories = [];
 
-
-/** Get NUM_CATEGORIES random category from API.
- *
- * Returns array of category ids
- */
-
-function getCategoryIds() {
+// Get 6 random categories from API.
+// Returns array of category ids
+async function getCategoryIds() {
+    const res = await axios.get(
+        "https://rithm-jeopardy.herokuapp.com/api/categories",
+        { params: { count: 14 } }
+    );
+    const categoryIds = res.data.map((categories) => categories.id);
+    console.log(categoryIds);
+    return _.sampleSize(categoryIds, 6);
 }
 
 /** Return object with data about a category:
@@ -41,7 +44,22 @@ function getCategoryIds() {
  *   ]
  */
 
-function getCategory(catId) {
+async function getCategory() {
+    const res = await axios.get(
+        "https://rithm-jeopardy.herokuapp.com/api/category",
+        {
+            params: { id: 3 },
+        }
+    );
+    const category = res.data;
+    const cluesArray = category.clues.map((clues) => ({
+        question: clues.question,
+        answer: clues.answer,
+        showing: null,
+    }));
+    const randomClues = _.sampleSize(cluesArray, 5);
+
+    return { title: category.title, clues: randomClues };
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
@@ -52,8 +70,7 @@ function getCategory(catId) {
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable() {
-}
+async function fillTable() {}
 
 /** Handle clicking on a clue: show the question or answer.
  *
@@ -63,21 +80,17 @@ async function fillTable() {
  * - if currently "answer", ignore click
  * */
 
-function handleClick(evt) {
-}
+function handleClick(evt) {}
 
 /** Wipe the current Jeopardy board, show the loading spinner,
  * and update the button used to fetch data.
  */
 
-function showLoadingView() {
-
-}
+function showLoadingView() {}
 
 /** Remove the loading spinner and update the button used to fetch data. */
 
-function hideLoadingView() {
-}
+function hideLoadingView() {}
 
 /** Start game:
  *
@@ -85,14 +98,13 @@ function hideLoadingView() {
  * - get data for each category
  * - create HTML table
  * */
+$('.start').on('click', setupAndStart)
 
-async function setupAndStart() {
-}
+async function setupAndStart() {}
 
 /** On click of start / restart button, set up game. */
-
 // TODO
 
 /** On page load, add event handler for clicking clues */
-
+$('.jeopardy-board').on('click', "td", function)
 // TODO
